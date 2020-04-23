@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <title>#{text['title']}</title>
+    </h:head>
+    <h:body>
+        <h:form id="loginForm">
+            <h:panelGrid columns="3">
+                <f:facet name="header"><h:link value="#{text['linkLogin']}" outcome="login" /> - #{text['linkRegister']}</f:facet>
+                <h:outputLabel value="#{text['lblEmail']}" for="email" />
+                <h:inputText p:type="email" id="email" p:required="required" value="#{personBean.person.email}">
+                    <f:validateRequired  />
+                </h:inputText>
+                <h:message for="email" />
+
+                <h:outputLabel value="#{text['lblPassword']}" for="password" />
+                <h:inputSecret id="password" required="true" p:required="required" p:minlength="6" value="#{personBean.person.password}">
+                    <f:validateRequired  />
+                    <f:validateLength minimum="6" />
+                </h:inputSecret>
+                <h:message for="password" />
+
+                <h:outputLabel value="#{text['lblFirstName']}" for="firstName" />
+                <h:inputText id="firstName" p:required="required" value="#{personBean.person.firstName}">
+                    <f:validateRequired  />
+                </h:inputText>
+                <h:message for="firstName" />
+
+                <h:outputLabel value="#{text['lblLastName']}" for="lastName" />
+                <h:inputText id="lastName" p:required="required" value="#{personBean.person.lastName}">
+                    <f:validateRequired  />
+                </h:inputText>
+                <h:message for="lastName" />
+
+                <f:facet name="footer"><h:commandButton value="#{text['btnRegister']}" action="#{personBean.register()}" /></f:facet>
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
