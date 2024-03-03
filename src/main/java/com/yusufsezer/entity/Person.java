@@ -1,8 +1,8 @@
 package com.yusufsezer.entity;
 
 import com.yusufsezer.contract.BaseEntity;
+import jakarta.persistence.Entity;
 import java.io.Serializable;
-import javax.persistence.Entity;
 
 @Entity
 public class Person extends BaseEntity implements Serializable {
