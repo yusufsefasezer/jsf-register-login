@@ -41,14 +41,11 @@ public class PersonBean implements Serializable {
 
     public String login() {
         String passwordMd5 = Helper.md5(person.getPassword());
-        Person foundPerson = personService
-                .login(person.getEmail(), passwordMd5);
+        Person foundPerson = personService.login(person.getEmail(), passwordMd5);
 
         if (foundPerson == null) {
-            String summary = Helper.getResourceBundle("text")
-                    .getString("msgNotFound");
-            Helper.getFacesContext()
-                    .addMessage(null, new FacesMessage(summary));
+            String summary = Helper.getResourceBundle("text").getString("msgNotFound");
+            Helper.getFacesContext().addMessage(null, new FacesMessage(summary));
             return "login";
         }
         HttpSession session = (HttpSession) Helper.getFacesContext()
@@ -59,14 +56,11 @@ public class PersonBean implements Serializable {
     }
 
     public String register() {
-        Person foundPerson = personService
-                .checkPersonWithEmail(person.getEmail());
+        Person foundPerson = personService.checkPersonWithEmail(person.getEmail());
 
         if (foundPerson != null) {
-            String summary = Helper.getResourceBundle("text")
-                    .getString("msgAlreadyRegister");
-            Helper.getFacesContext()
-                    .addMessage(null, new FacesMessage(summary));
+            String summary = Helper.getResourceBundle("text").getString("msgAlreadyRegister");
+            Helper.getFacesContext().addMessage(null, new FacesMessage(summary));
             return "register";
         }
 

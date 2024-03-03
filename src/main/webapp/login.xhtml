@@ -3,12 +3,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:p="jakarta.faces.passthrough">
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>#{text['title']}</title>
     </h:head>
     <h:body>
+        <p:tooltip/>
         <h:form id="loginForm">
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
             <h:panelGrid columns="3">
                 <f:facet name="header">#{text['linkLogin']} - <h:link value="#{text['linkRegister']}" outcome="register" /></f:facet>
                 <h:outputLabel value="#{text['lblEmail']}" for="email" />

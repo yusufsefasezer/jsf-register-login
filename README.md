@@ -1,6 +1,6 @@
 # Java JSF Register Login
 
-JSF Register Login application developed with Java EE JSF.
+JSF Register Login application developed with Jakarta EE JSF.
 
 This app developed with Java EE JSF, EJB, JPA, Maven, MySQL.
 

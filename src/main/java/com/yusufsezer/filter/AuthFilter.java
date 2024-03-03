@@ -8,6 +8,7 @@ import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,6 +16,11 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+@WebFilter(
+        urlPatterns = {
+            "/index.xhtml"
+        }
+)
 public class AuthFilter implements Filter {
 
     private static final boolean DEGUG = true;
@@ -35,16 +41,21 @@ public class AuthFilter implements Filter {
         Throwable problem = null;
         try {
 
-            HttpServletRequest httpRequest = (HttpServletRequest) request;
-            httpRequest.setCharacterEncoding("UTF-8");
+            HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+            httpServletRequest.setCharacterEncoding("UTF-8");
 
-            Person loginPerson = Helper.getLoginPerson(httpRequest);
-            String reqURL = httpRequest.getServletPath();
+            Person loginPerson = Helper.getLoginPerson(httpServletRequest);
+            String reqURL = httpServletRequest.getServletPath();
             if (loginPerson == null) {
-                if (!reqURL.contains(Helper.LOGIN_PAGE)
-                        && !reqURL.contains(Helper.REGISTER_PAGE)) {
-                    ((HttpServletResponse) response).sendRedirect(Helper.LOGIN_PAGE);
+
+                boolean isSpecialPage = !reqURL.contains(Helper.LOGIN_PAGE) && !reqURL.contains(Helper.REGISTER_PAGE);
+
+                if (isSpecialPage) {
+                    httpServletResponse.sendRedirect(Helper.LOGIN_PAGE);
+                    return;
                 }
+
             }
 
             chain.doFilter(request, response);
@@ -53,11 +64,11 @@ public class AuthFilter implements Filter {
         }
 
         if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
+            if (problem instanceof ServletException servletException) {
+                throw servletException;
             }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
+            if (problem instanceof IOException iOException) {
+                throw iOException;
             }
             sendProcessingError(problem, response);
         }
@@ -102,15 +113,13 @@ public class AuthFilter implements Filter {
         if (stackTrace != null && !stackTrace.equals("")) {
             try {
                 response.setContentType("text/html");
-                try (PrintStream ps = new PrintStream(response.getOutputStream())) {
-                    PrintWriter pw = new PrintWriter(ps);
+                try (PrintStream ps = new PrintStream(response.getOutputStream()); PrintWriter pw = new PrintWriter(ps)) {
                     pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
 
                     // PENDING! Localize this for next official release
                     pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
                     pw.print(stackTrace);
                     pw.print("</pre></body>\n</html>"); //NOI18N
-                    pw.close();
                 }
                 response.getOutputStream().close();
             } catch (IOException ex) {

@@ -6,6 +6,6 @@
         <title>#{text['title']}</title>
     </h:head>
     <h:body>
-        Hello from Facelets
+        Hello #{sessionScope['person'].firstName} #{sessionScope['person'].lastName}
     </h:body>
 </html>
